@@ -8,6 +8,7 @@ services:
     plan: free
     name: Tepthon
     env: python
+    repo: https://github.com/zxaax/TepA
     buildCommand: pip install -U -r requirements.txt
     startCommand: python3 server.py & python3 -m Tepthon
     region: frankfurt
@@ -32,4 +33,4 @@ services:
         fromDatabase:
           name: Tepthon
           property: connectionString   
-    autoDeploy: false
+  
