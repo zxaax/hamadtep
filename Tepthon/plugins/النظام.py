@@ -27,7 +27,7 @@ from ..core.managers import edit_delete, edit_or_reply
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
 from ..helpers.functions import zedalive, check_data_base_heal_th, get_readable_time
 from ..helpers.utils import _zedutils, reply_id, parse_pre, checking, yaml_format, install_pip, get_user_from_event, _format
-from . import zedub, BOTLOG, BOTLOG_CHATID, HEROKU_APP, mention, StartTime, zedversion
+from . import zedub, BOTLOG, BOTLOG_CHATID, HEROKU_APP, mention, StartTime, tepversion
 
 if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
     os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
