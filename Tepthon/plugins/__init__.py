@@ -14,16 +14,16 @@ from ..Config import Config
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..core.session import zedub
-from Tepthon helpers.functions.musictool import song_download
 from ..helpers import *
-from ..helpers.utils import _zedtools, _zedutils, _format, install_pip, reply_id
+from ..helpers.utils import _reptools, _reputils, _format, install_pip, reply_id
 from ..sql_helper.globals import gvarstatus
+from ..helpers.functions.musictool import song_download
 
 # =================== CONSTANT ===================
 bot = zedub
 LOGS = logging.getLogger(__name__)
 USERID = zedub.uid if Config.OWNER_ID == 0 else Config.OWNER_ID
-ALIVE_NAME = Config.ALIVE_NAME
+ALIVE_NAME = gvarstatus("ALIVE_NAME") if gvarstatus("ALIVE_NAME") else "-"
 
 Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
 heroku_api = "https://api.heroku.com"
@@ -33,8 +33,8 @@ HEROKU_API_KEY = Config.HEROKU_API_KEY
 thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
 
 # mention user
-mention = f"[{Config.ALIVE_NAME}](tg://user?id={USERID})"
-hmention = f"<a href = tg://user?id={USERID}>{Config.ALIVE_NAME}</a>"
+mention = f"[{ALIVE_NAME}](tg://user?id={USERID})"
+hmention = f"<a href = tg://user?id={USERID}>{ALIVE_NAME}</a>"
 
 PM_START = []
 PMMESSAGE_CACHE = {}
@@ -85,7 +85,7 @@ async def make_gif(event, reply, quality=None, fps=None):
     result_p = os.path.join("temp", "animation.gif")
     animation = lottie.parsers.tgs.parse_tgs(reply)
     with open(result_p, "wb") as result:
-        await _zedutils.run_sync(
+        await _reputils.run_sync(
             lottie.exporters.gif.export_gif, animation, result, quality, fps
         )
     return result_p
