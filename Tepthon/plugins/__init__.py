@@ -14,6 +14,7 @@ from ..Config import Config
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..core.session import zedub
+from Tepthon helpers.functions.musictool import song_download
 from ..helpers import *
 from ..helpers.utils import _zedtools, _zedutils, _format, install_pip, reply_id
 from ..sql_helper.globals import gvarstatus
