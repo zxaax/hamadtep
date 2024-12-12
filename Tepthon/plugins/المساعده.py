@@ -9,7 +9,7 @@ import requests
 from telethon import Button, events, version
 from telethon.events import CallbackQuery
 
-from . import StartTime, zedub, zedversion, mention
+from . import StartTime, zedub, tepversion, mention
 
 from ..Config import Config
 from ..core.managers import edit_or_reply
