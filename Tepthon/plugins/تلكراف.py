@@ -25,8 +25,6 @@ extractor = URLExtract()
 telegraph = Telegraph()
 r = telegraph.create_account(short_name=Config.TELEGRAPH_SHORT_NAME)
 auth_url = r["auth_url"]
-IMGUR_CLIENT_ID = "de4495cc3347577"
-IMGUR_CLIENT_SECRET = "d725b7d92d1eff614ba673817e03ea89c7986399"
 
 
 def resize_image(image):
@@ -87,7 +85,7 @@ async def _(event):
             ms = (end - start).seconds
             os.remove(downloaded_file_name)
             await zedevent.edit(
-                f"**⎉╎الــرابـط : ** [اضغــط هنـــا](https://api.imgur.com/3/upload/{media_urls[0]})\
+                f"**⎉╎الــرابـط : ** [اضغــط هنـــا](https://graph.org{media_urls[0]})\
                     \n**⎉╎الـوقـت : **`{ms} seconds.`",
                 link_preview=True,
             )
@@ -122,7 +120,7 @@ async def _(event):
             response = telegraph.create_page(title_of_page, html_content=page_content)
         end = datetime.now()
         ms = (end - start).seconds
-        zed = f"https://api.imgur.com/3/upload/{response['path']}"
+        zed = f"https://telegra.ph/{response['path']}"
         await zedevent.edit(
             f"**link : ** [telegraph]({zed})\
                  \n**Time Taken : **`{ms} seconds.`",
