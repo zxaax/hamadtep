@@ -55,7 +55,7 @@ async def get_song(event):
             await event.reply(f"تم العثور على المطلوب بحثه: {title}nجاري إرسال الملف...")
 
             # إرسال الملف إلى تيليجرام
-            await zq_lo.send_file(event.chat_id, filename)
+            await zedub.send_file(event.chat_id, filename)
 
             # حذف الملف بعد الإرسال
             os.remove(filename)
