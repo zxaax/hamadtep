@@ -60,4 +60,4 @@ async def get_song(event):
             # حذف الملف بعد الإرسال
             os.remove(filename)
         except Exception as e:
-            await event.reply(f"حدث خطأ أثناء البحث عن الأغنية: {e}")
+            await event.reply(f"حدث خطأ أثناء البحث عن المطلوب: {e}")
