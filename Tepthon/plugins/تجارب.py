@@ -6,13 +6,13 @@ import yt_dlp
 import os
 from telethon import TelegramClient, events
 from yt_dlp import YoutubeDL
-from repthon import zq_lo
+from Tepthon import zedub
 from ..Config import Config
 
 plugin_category = "البوت"
 
 def get_cookies_file():
-    folder_path = f"{os.getcwd()}/rbaqir"
+    folder_path = f"{os.getcwd()}/rcookies"
     txt_files = glob.glob(os.path.join(folder_path, '*.txt'))
     if not txt_files:
         raise FileNotFoundError("No .txt files found in the specified folder.")
@@ -20,10 +20,10 @@ def get_cookies_file():
     return cookie_txt_file
 
 
-@zq_lo.on(events.NewMessage(pattern='.بحث3 (.*)'))
+@zedub.on(events.NewMessage(pattern='.بحث3 (.*)'))
 async def get_song(event):
     song_name = event.pattern_match.group(1)
-    await event.reply(f"جاري البحث عن الأغنية: {song_name}...")
+    await event.reply(f"جاري البحث عن المطلوب.: {song_name}...")
 
     # إعداد خيارات yt-dlp
     ydl_opts = {
@@ -52,7 +52,7 @@ async def get_song(event):
             title = info['entries'][0]['title']
             filename = f"{title}.mp3"
 
-            await event.reply(f"تم العثور على الأغنية: {title}nجاري إرسال الملف...")
+            await event.reply(f"تم العثور على المطلوب بحثه: {title}nجاري إرسال الملف...")
 
             # إرسال الملف إلى تيليجرام
             await zq_lo.send_file(event.chat_id, filename)
