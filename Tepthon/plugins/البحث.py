@@ -84,7 +84,25 @@ async def song(event):
     for files in (zedthumb, song_file):
         if files and os.path.exists(files):
             os.remove(files)
-
+ydl_opts = {
+        "format": "bestaudio/best",
+        "addmetadata": True,
+        "key": "FFmpegMetadata",
+        "writethumbnail": False,
+        "prefer_ffmpeg": True,
+        "geo_bypass": True,
+        "nocheckcertificate": True,
+        "postprocessors": [
+            {"key": "FFmpegVideoConvertor", "preferedformat": "mp3"},
+            {"key": "FFmpegMetadata"},
+            {"key": "FFmpegExtractAudio"},
+        ],
+        "outtmpl": "%(title)s.%(ext)s",
+        "logtostderr": False,
+        "quiet": True,
+        "no_warnings": True,
+        "cookiefile" : get_cookies_file(),
+   }
 
 @zedub.zed_cmd(
     pattern="فيديو(?:\s|$)([\s\S]*)",
