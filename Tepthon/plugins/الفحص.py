@@ -44,7 +44,7 @@ async def zed_alive(event):
     else:
         zedda = f"{bt.year}/{bt.month}/{bt.day}"
     Z_EMOJI = gvarstatus("ALIVE_EMOJI") or "✥┊"
-    ALIVE_TEXT = gvarstatus("ALIVE_TEXT") or "**بـوت تيبثـون 𝗧𝗘𝗣𝗧𝗛𝗢𝗡 يعمـل بنجـاح ☑️ ..**"
+    ALIVE_TEXT = gvarstatus("ALIVE_TEXT") or "**مرحبًــا 👋، بوت 𝗧𝗘𝗣𝗧𝗛𝗢𝗡 يعمـل بنجــاح .. ✅**"
     ZED_IMG = gvarstatus("ALIVE_PIC")
     USERID = zedub.uid if Config.OWNER_ID == 0 else Config.OWNER_ID
     ALIVE_NAME = gvarstatus("ALIVE_NAME") if gvarstatus("ALIVE_NAME") else "-"
@@ -90,7 +90,7 @@ zed_temp = """{ALIVE_TEXT}
 **{Z_EMOJI} إصـدار المكتبـة :** `{telever}`
 **{Z_EMOJI} إصـدار السـورس :** `{tepver}`
 **{Z_EMOJI} إصـدار بايثـون :** `{pyver}`
-**{Z_EMOJI} منصـة التنصيب :** `KOYᗴᗷ`
+**{Z_EMOJI} منصـة التنصيب :** `𝐫𝐞𝐧𝐝𝐞𝐫`
 **{Z_EMOJI} وقت التشغيل :** `{uptime}`
 **{Z_EMOJI} تاريـخ التنصيب :** `{zzd}`
 **{Z_EMOJI} وقت التنصيب :** `{zzt}`
