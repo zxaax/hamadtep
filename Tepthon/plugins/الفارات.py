@@ -125,7 +125,7 @@ async def variable(event):
     input_str = event.pattern_match.group(1)
     reply = await event.get_reply_message()
     vinfo = reply.text
-    rep = await edit_or_reply(event, "**⎉╎جـاري إضـافة الفـار إلـى بـوتك ...**")
+    zed = await edit_or_reply(event, "**⎉╎جـاري إضـافة الفـار إلـى بـوتك ...**")
     # All Rights Reserved for "Tepthon" "باقر"
     if input_str == "كليشة الفحص" or input_str == "كليشه الفحص":
         variable = "ALIVE_TEMPLATE"
@@ -344,7 +344,7 @@ async def variable(event):
         addgvar("PRIVATE_GROUP_BOT_API_ID", vinfo)
     elif input_str == "السجل 2" or input_str == "كروب السجل 2":
         if Config.HEROKU_API_KEY is None:
-            return await ed(event, "**⎉╎عـذراً .. عـزيـزي ⚠️**\n**⎉╎هـذا الفـار لا يعمـل الآن ✖️**\n**⎉╎سـوف يتم تحديثه لاحقاً ع منصه سكالينجو 🔄**")
+            return await ed(event, "**⎉╎عذرًا .. عـزيـزي ⚠️**\n**⎉╎هـذا الفـار لا يعمـل الآن ✖️**\n**⎉╎سـوف يتم تحديثه لاحقاً ع منصه سكالينجو 🔄**")
         variable = "PRIVATE_GROUP_ID"
         await asyncio.sleep(1.5)
         if variable in heroku_var:
