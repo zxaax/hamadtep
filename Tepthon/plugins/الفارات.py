@@ -293,10 +293,10 @@ async def variable(event):
         await asyncio.sleep(1.5)
         if gvarstatus("Z_Point") is None:
             addgvar(variable, vinfo)
-            await zed.edit("**⎉╎تم تغييـر {} بنجـاح ☑️**\n**⎉╎البـوت المضـاف** \n {} \n\n**⎉╎الآن قـم بـ ارسـال الأمـر ↶** `.تجميع` **لـ البـدء بتجميـع النقـاط من البـوت الجـديـد . .**".format(input_str, vinfo))
+            await zed.edit("**⎉╎تم تغييـر {} بنجـاح ☑️**\n**⎉╎البـوت المضـاف** \n {} \n\n**⎉╎الآن قـم بـ ارسـال الامـر ↶** `.تجميع` **لـ البـدء بتجميـع النقـاط من البـوت الجـديـد . .**".format(input_str, vinfo))
         else:
             addgvar(variable, vinfo)
-            await zed.edit("**⎉╎تم إضـافه {} بنجـاح ☑️**\n**⎉╎البـوت المضـاف** \n {} \n\n**⎉╎الآن قـم بـ ارسـال الأمـر ↶** `.تجميع` **لـ البـدء بتجميـع النقـاط من البـوت الجـديـد . .**".format(input_str, vinfo))
+            await zed.edit("**⎉╎تم اضـافه {} بنجـاح ☑️**\n**⎉╎البـوت المضـاف** \n {} \n\n**⎉╎الآن قـم بـ ارسـال الامـر ↶** `.تجميع` **لـ البـدء بتجميـع النقـاط من البـوت الجـديـد . .**".format(input_str, vinfo))
     elif input_str == "اسم المستخدم" or input_str == "الاسم":
         variable = "ALIVE_NAME"
         await asyncio.sleep(1.5)
