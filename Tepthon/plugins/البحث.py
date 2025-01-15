@@ -17,7 +17,7 @@ import glob
 import asyncio
 import yt_dlp
 import os
-from telethon import TelegramClient, events
+from ..core.managers import edit_or_reply
 from yt_dlp import YoutubeDL
 from Tepthon import zedub
 from ..Config import Config
