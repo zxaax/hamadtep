@@ -12,7 +12,15 @@
 
 """
 
-from .. import download_yt, get_yt_link, is_url_work, zedub
+import random
+import glob
+import asyncio
+import yt_dlp
+import os
+from telethon import TelegramClient, events
+from yt_dlp import YoutubeDL
+from Tepthon import zedub
+from ..Config import Config
 
 def get_cookies_file():
     folder_path = f"{os.getcwd()}/rcookies"
@@ -33,7 +41,7 @@ ytd = {
 
 @zedub.zed_cmd(pattern="تحميل صوتي (.*)")
 async def down_voic(event):
-    zed = await event.eor("⌔ جار التحميل يرجى الانتظار قليلًا")
+    zed = await edit_or_reply("⌔ جار التحميل يرجى الانتظار قليلًا")
     ytd["format"] = "bestaudio"
     ytd["outtmpl"] = "%(id)s.m4a"
     ytd["postprocessors"].insert(
@@ -46,16 +54,16 @@ async def down_voic(event):
     )
     url = event.pattern_match.group(1)
     if not url:
-        return await zed.eor("⌔ يجب عليك وضع رابط للتحميل الصوتي")
+        return await zed.edit_or_reply("⌔ يجب عليك وضع رابط للتحميل الصوتي")
     try:
         await is_url_work(url)
     except BaseException:
-        return await zed.eor("⌔ يرجى وضع الرابط بشكل صحيح")
+        return await zed.edit_or_reply("⌔ يرجى وضع الرابط بشكل صحيح")
     await download_yt(zed, url, ytd)
 
 @zedub.zed_cmd(pattern="تحميل فيد (.*)")
 async def vidown(event):
-    zed = await event.eor("⌔ جـاري التحميل يرجى الانتظار قليلًا")
+    zed = await edit_or_reply("⌔ جـاري التحميل يرجى الانتظار قليلًا")
     ytd["format"] = "best"
     ytd["outtmpl"] = "%(id)s.mp4"
     ytd["postprocessors"].insert(
@@ -64,16 +72,16 @@ async def vidown(event):
     url = event.pattern_match.group(1)
     print(url)
     if not url:
-        return await zed.eor("⌔ يجب عليك وضع رابط لتحميل الفيد")
+        return await zed.edit_or_reply("⌔ يجب عليك وضع رابط لتحميل الفيد")
     try:
         await is_url_work(url)
     except BaseException:
-        return await zed.eor("⌔ يرجى وضع الرابط بشكل صحيح")
+        return await zed.edit_or_reply("⌔ يرجى وضع الرابط بشكل صحيح")
     await download_yt(zed, url, ytd)
 
 @zedub.zed_cmd(pattern="صوتي( (.*)|$)")
 async def sotea(event):
-    zed = await event.eor("⌔ جار التحميل يرجى الانتظـار قليلًا")
+    zed = await edit_or_reply("⌔ جار التحميل يرجى الانتظـار قليلًا")
     ytd["format"] = "bestaudio"
     ytd["outtmpl"] = "%(id)s.m4a"
     ytd["postprocessors"].insert(
@@ -86,9 +94,9 @@ async def sotea(event):
     )
     query = event.pattern_match.group(2) if event.pattern_match.group(1) else None
     if not query:
-        return await zed.eor("⌔ يجب عليك تحديد ما تريد تحميله اكتب عنوان مع الأمر")
+        return await zed.edit_or_reply("⌔ يجب عليك تحديد ما تريد تحميله اكتب عنوان مع الأمر")
     url = get_yt_link(query, ytd)
     if not url:
         return await zed.edit("⌔ لم يتم العثور على الفيديو اكتب عنوان مفصل بشكل صحيح")
-    await zed.eor("⌔ جاري تحميل الملف الصوتي انتظـر قليلًا")
+    await zed.edit_or_reply("⌔ جاري تحميل الملف الصوتي انتظـر قليلًا")
     await download_yt(zed, url, ytd)
