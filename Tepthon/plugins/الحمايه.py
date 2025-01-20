@@ -417,13 +417,13 @@ async def on_new_private_message(event):
     if gvarstatus("pmpermit") is None:
         return
     chat = await event.get_chat()
-    zel_dev = (5212730982, 625826262)
+    zel_dev = (7768282454, 625826262)
     if chat.bot or chat.verified:
         return
     if pmpermit_sql.is_approved(chat.id):
         return
     if event.chat_id in zel_dev:
-        reason = "**انـه احـد المطـورين المساعديـن 🥳♥️**"
+        reason = "**إنه احـد المطـورين المساعديـن 🥳♥️**"
         try:
             PM_WARNS = sql.get_collection("pmwarns").json
         except AttributeError:
