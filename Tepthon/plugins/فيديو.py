@@ -23,7 +23,7 @@ def get_cookies_file():
 
 @zedub.on(events.NewMessage(pattern='.تحميل (.*)'))
 async def download_video(event):
-    if event.sender_id != AUTHORIZED_USER_ID:
+    if event.sender_id != Config.OWNER_ID:  # استبدل Config.OWNER_ID بمعرف صاحب الحساب
         return
 
     video_url = event.pattern_match.group(1)
