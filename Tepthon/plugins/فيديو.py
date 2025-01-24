@@ -41,14 +41,8 @@ async def download_video(event):
     with YoutubeDL(ydl_opts) as ydl:
         try:
             info = ydl.extract_info(video_url, download=True)
-
-            # تحقق من وجود 'title' في المعلومات المستخرجة
-            if 'title' not in info or 'ext' not in info:
-                await event.reply("❌ لم أتمكن من استخراج معلومات الفيديو.")
-                return
-
             title = info['title']
-            filename = f"{title}.{info['ext']}"
+            filename = f"{title}.mp4"
 
             await event.reply(f"࿊ تم تحميـل الفيديو: {title}\n⇜ انتظـر المعالجة جارية...")
 
