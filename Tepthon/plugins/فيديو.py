@@ -1,3 +1,27 @@
+#تيبثــون.
+import random
+import glob
+import asyncio
+import yt_dlp
+import os
+from telethon import TelegramClient, events
+from yt_dlp import YoutubeDL
+from Tepthon import zedub
+from ..Config import Config
+
+plugin_category = "البوت"
+
+
+def get_cookies_file():
+    folder_path = f"{os.getcwd()}/rcookies"
+    txt_files = glob.glob(os.path.join(folder_path, '*.txt'))
+    if not txt_files:
+        raise FileNotFoundError("No .txt files found in the specified folder.")
+    cookie_txt_file = random.choice(txt_files)
+    return cookie_txt_file
+
+
+
 @zedub.on(events.NewMessage(pattern='.تحميل (.*)'))
 async def download_video(event):
     # تحقق مما إذا كان المرسل هو الحساب المنصب فقط
