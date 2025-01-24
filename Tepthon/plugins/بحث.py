@@ -17,7 +17,7 @@ def get_cookies_file():
         raise FileNotFoundError("No .txt files found in the specified folder.")
     cookie_txt_file = random.choice(txt_files)
     return cookie_txt_file
-
+    
 @zedub.on(events.NewMessage(pattern='.بحث (.*)'))
 async def search_video(event):
     # تحقق مما إذا كان المرسل هو الحساب المنصب فقط
@@ -31,6 +31,7 @@ async def search_video(event):
     ydl_opts = {
         "format": "best",
         "noplaylist": True,  # عدم تنزيل قوائم التشغيل
+        "cookiefile": get_cookies_file(),
     }
 
     with YoutubeDL(ydl_opts) as ydl:
