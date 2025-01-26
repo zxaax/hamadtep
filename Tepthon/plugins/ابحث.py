@@ -1,8 +1,5 @@
-#باقر_ريبثون
 import random
 import glob
-import asyncio
-import yt_dlp
 import os
 from telethon import TelegramClient, events
 from yt_dlp import YoutubeDL
@@ -19,42 +16,38 @@ def get_cookies_file():
     cookie_txt_file = random.choice(txt_files)
     return cookie_txt_file
 
-
 @zedub.on(events.NewMessage(pattern='.بحث (.*)'))
-async def get_song(event) 
+async def download_audio(event):
+    # تحقق مما إذا كان المرسل هو الحساب المنصب فقط
     if event.sender_id != Config.OWNER_ID:  # استبدل Config.OWNER_ID بمعرف صاحب الحساب
         return
-    song_name = event.pattern_match.group(1)
-    await event.reply(f"جاري البحث عن المطلوب.: {song_name}...")
 
-    # إعداد خيارات yt-dlp
+    audio_name = event.pattern_match.group(1)
+    await event.reply(f"࿊ مرحبًــا بـك عزيزي المنصـب، جاري البحث عن: {audio_name}...")
+
+    # إعداد خيارات yt-dlp لتحميل الصوت فقط
     ydl_opts = {
         "format": "bestaudio/best",
-        "addmetadata": True,
-        "key": "FFmpegMetadata",
-        "writethumbnail": False,
-        "prefer_ffmpeg": True,
-        "geo_bypass": True,
-        "nocheckcertificate": True,
-        "postprocessors": [
-            {"key": "FFmpegVideoConvertor", "preferedformat": "mp3"},
-            {"key": "FFmpegMetadata"},
-            {"key": "FFmpegExtractAudio"},
-        ],
+        "extractaudio": True,  # استخراج الصوت فقط
         "outtmpl": "%(title)s.%(ext)s",
-        "logtostderr": False,
-        "quiet": True,
-        "no_warnings": True,
-        "cookiefile" : get_cookies_file(),
-   }
+        "cookiefile": get_cookies_file(),
+    }
 
     with YoutubeDL(ydl_opts) as ydl:
         try:
-            info = ydl.extract_info(f"ytsearch:{song_name}", download=True)
-            title = info['entries'][0]['title']
-            filename = f"{title}.mp3"
+            # البحث عن الصوت باستخدام اسم الصوت
+            search_url = f"ytsearch:{audio_name}"
+            info = ydl.extract_info(search_url, download=True)
 
-            await event.reply(f"تم العثور على المطلوب بحثه: {title}nجاري إرسال الملف...")
+            # تحقق من وجود 'title' في المعلومات المستخرجة
+            if 'title' not in info or 'ext' not in info:
+                await event.reply("❌ لم أتمكن من استخراج معلومات الصوت.")
+                return
+
+            title = info['title']
+            filename = f"{title}.{info['ext']}"
+
+            await event.reply(f"࿊ تم تحميـل الصوت: {title}\n⇜ انتظـر المعالجة جارية...")
 
             # إرسال الملف إلى تيليجرام
             await zedub.send_file(event.chat_id, filename)
@@ -62,4 +55,4 @@ async def get_song(event)
             # حذف الملف بعد الإرسال
             os.remove(filename)
         except Exception as e:
-            await event.reply(f"حدث خطأ أثناء البحث عن المطلوب: {e}")
+            await event.reply(f"خطـــأ ❌: {e}")
