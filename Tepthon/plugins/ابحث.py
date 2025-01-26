@@ -1,5 +1,5 @@
-#@lMl10l   - @Tepthon
-# Copyright (C) 2021 Tepthon TEAM
+#@lMl10l   - @AljokerUserbot
+# Copyright (C) 2021 Joker TEAM
 # FILES WRITTEN BY  @lMl10l
 import asyncio
 import io
