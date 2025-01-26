@@ -1,53 +1,53 @@
+import time
 import asyncio
-from telethon import events
 from Tepthon import zedub
+from telethon import events
+from ..Config import Config
 
-# تعريف المتغيرات الجديدة
-custom_enabled = False
-custom_timer_enabled = False
-OWNER_ID = {}
+plugin_category = "البوت"
 
-@zedub.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
-async def mark_as_read(event):
-    global custom_timer_enabled, OWNER_ID
-    sender_id = event.sender_id
-    if custom_timer_enabled and sender_id in OWNER_ID:
-        custom_time = OWNER_ID[sender_id]
-        if custom_time > 0:
-            await asyncio.sleep(custom_time)
-        await event.mark_read()
+active_readers = {}
 
-@zedub.on(events.NewMessage(outgoing=True, pattern=r'^\.تعطيل التخصيص$'))
-async def disable_custom(event):
-    global custom_timer_enabled
-    custom_timer_enabled = False
-    await event.edit('᯽︙ تم تعطيل أمر التخصيص بنجاح ✅')
+@zedub.on(events.NewMessage(pattern=r'\.القراءة تلقائيا (\d+) (\d+)'))
+async def read_messages(event):
+    user_id = int(event.message.text.split()[2])
+    seconds = int(event.message.text.split()[1])
+    
+    if user_id not in active_readers:
+        active_readers[user_id] = True
+        
+        await event.reply(f"📖 بدء القراءة تلقائيًّا من المستخدم {user_id} كل {seconds} ثانية.")
+        
+        while active_readers[user_id]:
+            await asyncio.sleep(seconds)
+            message = await zedub.get_message(event.chat_id, sender=user_id)
+            if message:
+                await event.reply(f"🔍 رسالة من {user_id}: {message.text}")
+            else:
+                await event.reply(f"❗ لم يتم العثور على رسائل جديدة من {user_id}.")
+        
+    else:
+        await event.reply("❌ القراءة تلقائيًّا لهذا المستخدم قيد التنفيذ بالفعل.")
 
-@zedub.on(events.NewMessage(outgoing=True, pattern=r'^\.تخصيص (\d+) (\d+)$'))
-async def enable_custom(event):
-    global custom_timer_enabled, OWNER_ID
-    custom_time = int(event.pattern_match.group(1))
-    user_id = int(event.pattern_match.group(2)) 
-    OWNER_ID[user_id] = custom_time
-    custom_timer_enabled = True
-    await event.edit(f'᯽︙ تم تفعيل أمر التخصيص بنجاح مع {custom_time} ثانية للمستخدم {user_id}')
+@zedub.on(events.NewMessage(pattern=r'\.القراءة تلقائيا للجميع (\d+)'))
+async def read_messages_all(event):
+    seconds = int(event.message.text.split()[2])
+    
+    await event.reply(f"📖 بدء القراءة تلقائيًّا من جميع المستخدمين كل {seconds} ثانية.")
+    
+    while True:
+        await asyncio.sleep(seconds)
+        async for user in zedub.iter_participants(event.chat_id):
+            message = await zedub.get_message(event.chat_id, sender=user.id)
+            if message:
+                await event.reply(f"🔍 رسالة من {user.id}: {message.text}")
+            else:
+                await event.reply(f"❗ لم يتم العثور على رسائل جديدة من {user.id}.")
 
-@zedub.on(events.NewMessage(outgoing=True, pattern=r'^\.تعطيل تخصيص الجميع$'))
-async def disable_global_custom(event):
-    global custom_enabled
-    custom_enabled = False
-    await event.edit('᯽︙ تم تعطيل أمر التخصيص للجميع بنجاح ✅')
-
-@zedub.on(admin_cmd(pattern=f"تخصيص عام (\d+)"))
-async def enable_global_custom(event):
-    global custom_enabled, custom_global_time
-    custom_global_time = int(event.pattern_match.group(1))
-    custom_enabled = True
-    await event.edit(f'᯽︙ تم تفعيل أمر التخصيص بنجاح مع {custom_global_time} ثانية')
-
-@zedub.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
-async def handle_global_custom(event):
-    global custom_enabled, custom_global_time
-    if custom_enabled:
-        await asyncio.sleep(custom_global_time)
-        await event.mark_read()
+@zedub.on(events.NewMessage(pattern=r'\.ايقاف القراءة تلقائيا'))
+async def stop_reading(event):
+    if active_readers:
+        active_readers.clear()
+        await event.reply("⏹️ تم إيقاف القراءة تلقائيًّا.")
+    else:
+        await event.reply("❌ لا توجد عملية قراءة قيد التنفيذ.")
