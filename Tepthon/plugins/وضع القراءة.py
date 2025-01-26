@@ -5,14 +5,14 @@ from Tepthon import zedub
 # تعريف المتغيرات الجديدة
 custom_enabled = False
 custom_timer_enabled = False
-CUSTOM_ID = {}
+OWNER_ID = {}
 
 @zedub.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
 async def mark_as_read(event):
-    global custom_timer_enabled, CUSTOM_ID
+    global custom_timer_enabled, OWNER_ID
     sender_id = event.sender_id
-    if custom_timer_enabled and sender_id in CUSTOM_ID:
-        custom_time = CUSTOM_ID[sender_id]
+    if custom_timer_enabled and sender_id in OWNER_ID:
+        custom_time = OWNER_ID[sender_id]
         if custom_time > 0:
             await asyncio.sleep(custom_time)
         await event.mark_read()
@@ -25,10 +25,10 @@ async def disable_custom(event):
 
 @zedub.on(events.NewMessage(outgoing=True, pattern=r'^\.تخصيص (\d+) (\d+)$'))
 async def enable_custom(event):
-    global custom_timer_enabled, CUSTOM_ID
+    global custom_timer_enabled, OWNER_ID
     custom_time = int(event.pattern_match.group(1))
     user_id = int(event.pattern_match.group(2)) 
-    CUSTOM_ID[user_id] = custom_time
+    OWNER_ID[user_id] = custom_time
     custom_timer_enabled = True
     await event.edit(f'᯽︙ تم تفعيل أمر التخصيص بنجاح مع {custom_time} ثانية للمستخدم {user_id}')
 
