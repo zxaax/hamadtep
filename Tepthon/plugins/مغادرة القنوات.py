@@ -1,6 +1,6 @@
 import asyncio
 from telethon import TelegramClient, events
-from Tepthon import zedub 
+from Tepthon import zedub
 from ..Config import Config
 
 plugin_category = "البوت"
