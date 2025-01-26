@@ -1,13 +1,14 @@
 import asyncio
 from telethon import TelegramClient, events
-from Tepthon import zedub
+from Tepthon import zedub 
+from telethon.tl.functions.channels import LeaveChannelRequest
 from ..Config import Config
 
 plugin_category = "البوت"
 
 @zedub.on(events.NewMessage(pattern='.مغادرة'))
 async def leave_all_channels(event):
-    # تحقق مما إذا كان المرسل هو الحساب المنصب فقط
+    # تأكد من أن المرسل هو الحساب المنصب فقط
     if event.sender_id != Config.OWNER_ID:  # تأكد من استبدال Config.OWNER_ID بمعرف صاحب الحساب
         return
 
@@ -16,7 +17,7 @@ async def leave_all_channels(event):
     try:
         async for dialog in zedub.iter_dialogs():
             if dialog.is_channel:
-                await zedub.leave_dialog(dialog)  # مغادرة القناة
+                await zedub(LeaveChannelRequest(dialog.id))  # استخدم LeaveChannelRequest لمغادرة القناة
                 await event.reply(f"✅ مغادرة القناة: {dialog.title}")
 
         await event.reply("✅ تم مغادرة جميع القنوات بنجاح.")
