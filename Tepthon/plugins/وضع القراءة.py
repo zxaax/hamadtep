@@ -11,7 +11,6 @@ active_readers = {}
 @zedub.on(events.NewMessage(pattern=r'\.القراءة تلقائيا (\d+) (\d+)'))
 async def read_messages(event):
     try:
-        # تأكد من أن الأوامر تحتوي على البيانات الصحيحة
         input_text = event.message.text.split()
         if len(input_text) != 3:
             await event.reply("❌ يرجى استخدام الأمر بشكل صحيح: `.القراءة تلقائيا <عدد الثواني> <أيدي المستخدم>`")
@@ -27,15 +26,18 @@ async def read_messages(event):
             
             while active_readers[user_id]:
                 await asyncio.sleep(seconds)
-                message = await zedub.get_message(event.chat_id, sender=user_id)
-                if message:
-                    await event.reply(f"🔍 رسالة من {user_id}: {message.text}")
-                else:
-                    await event.reply(f"❗ لم يتم العثور على رسائل جديدة من {user_id}.")
+                try:
+                    message = await zedub.get_message(event.chat_id, sender=user_id)
+                    if message:
+                        await event.reply(f"🔍 رسالة من {user_id}: {message.text}")
+                    else:
+                        await event.reply(f"❗ لم يتم العثور على رسائل جديدة من {user_id}.")
+                except Exception as e:
+                    await event.reply(f"❌ حدث خطأ بينما نحاول جلب رسالة: {str(e)}")
         
         else:
             await event.reply("❌ القراءة تلقائيًا لهذا المستخدم قيد التنفيذ بالفعل.")
-    
+
     except ValueError:
         await event.reply("❌ يرجى التأكد من أن الأرقام صحيحة وضمن النطاق.")
     except Exception as e:
