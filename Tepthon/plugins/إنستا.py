@@ -4,7 +4,7 @@ from ..Config import Config
 
 plugin_category = "البوت"
 
-@zedub.on(events.NewMessage(pattern='!انستا'))
+@zedub.on(events.NewMessage(pattern='.انستا'))
 async def download_instagram_video(event):
     # احصل على رابط الفيديو من الرسالة
     post_url = event.message.text.split(maxsplit=1)[1] if len(event.message.text.split()) > 1 else None
