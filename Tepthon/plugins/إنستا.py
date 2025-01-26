@@ -1,5 +1,6 @@
 from instaloader import Instaloader, Post
 from telethon import events
+from Tepthon import zedub 
 from ..Config import Config
 
 plugin_category = "البوت"
