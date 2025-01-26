@@ -1,78 +1,53 @@
-import time
+#حقوق_سورس_الجوكر
 import asyncio
 from telethon import events
 from Tepthon import zedub
-from ..Config import Config
 
-plugin_category = "البوت"
+tep_enabled = False
+tepthon_enabled = False
+OWNER_ID = {}
 
-active_readers = {}
+@zedub.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
+async def mark_as_read(event):
+    global tepthon_enabled, OWNER_ID
+    sender_id = event.sender_id
+    if tepthon_enabled and sender_id in OWNER_ID:
+        joker_time = OWNER_ID[sender_id]
+        if joker_time > 0:
+            await asyncio.sleep(joker_time)
+        await event.mark_read()
 
-@zedub.on(events.NewMessage(pattern=r'\.القراءة تلقائيا (\d+) (\d+)'))
-async def read_messages(event):
-    try:
-        input_text = event.message.text.split()
-        if len(input_text) != 3:
-            await event.reply("❌ يرجى استخدام الأمر بشكل صحيح: `.القراءة تلقائيا <عدد الثواني> <أيدي المستخدم>`")
-            return
-        
-        seconds = int(input_text[1])
-        user_id = int(input_text[2])
+@zedub.on(events.NewMessage(outgoing=True, pattern=r'^\.تعطيل القراءة تلقائيا$'))
+async def disable_tepthon(event):
+    global tepthon_enabled
+    tepthon_enabled = False
+    await event.edit('❌ تم تعطيل أمر قراءة الرسائل تلقائيًّا بنجاح.')
 
-        if user_id not in active_readers:
-            active_readers[user_id] = True
-            
-            await event.reply(f"📖 بدء القراءة تلقائيًا من المستخدم {user_id} كل {seconds} ثانية.")
-            
-            while active_readers[user_id]:
-                await asyncio.sleep(seconds)
-                try:
-                    message = await zedub.get_message(event.chat_id, sender=user_id)
-                    if message:
-                        await event.reply(f"🔍 رسالة من {user_id}: {message.text}")
-                    else:
-                        await event.reply(f"❗ لم يتم العثور على رسائل جديدة من {user_id}.")
-                except Exception as e:
-                    await event.reply(f"❌ حدث خطأ بينما نحاول جلب رسالة: {str(e)}")
-        
-        else:
-            await event.reply("❌ القراءة تلقائيًا لهذا المستخدم قيد التنفيذ بالفعل.")
+@zedub.on(events.NewMessage(outgoing=True, pattern=r'^\.القراءة تلقائيا (\d+) (\d+)$'))
+async def enable_tepthon(event):
+    global tepthon_enabled, OWNER_ID
+    joker_time = int(event.pattern_match.group(1))
+    user_id = int(event.pattern_match.group(2)) 
+    OWNER_ID[user_id] = joker_time
+    tepthon_enabled = True
+    await event.edit(f'✅ تم تفعيل أمر قراءة الرسائل تلقائيًّا مع {joker_time} ثانية للمستخدم {user_id}.')
 
-    except ValueError:
-        await event.reply("❌ يرجى التأكد من أن الأرقام صحيحة وضمن النطاق.")
-    except Exception as e:
-        await event.reply(f"❌ حدث خطأ غير متوقع: {str(e)}")
+@zedub.on(events.NewMessage(outgoing=True, pattern=r'^\.تعطيل قراءة الرسائل للجميع$'))
+async def disable_tep(event):
+    global tep_enabled
+    tep_enabled = False
+    await event.edit('❌ تم تعطيل قراءة الرسائل تلقائيًّا على الجميع بنجاح.')
 
-@zedub.on(events.NewMessage(pattern=r'\.القراءة تلقائيا للجميع (\d+)'))
-async def read_messages_all(event):
-    try:
-        input_text = event.message.text.split()
-        if len(input_text) != 3:
-            await event.reply("❌ يرجى استخدام الأمر بشكل صحيح: `.القراءة تلقائيا للجميع <عدد الثواني>`")
-            return
-        
-        seconds = int(input_text[2])
+@zedub.on(events.NewMessage(outgoing=True, pattern=r'^\.قراءة رسائل الجميع (\d+)$'))
+async def enable_tep(event):
+    global tep_enabled, tep_time
+    tep_time = int(event.pattern_match.group(1))
+    tep_enabled = True
+    await event.edit(f'✅ تم تفعيل مود قراءة الرسائل تلقائيًّا مع {tep_time} ثانية.')
 
-        await event.reply(f"📖 بدء القراءة تلقائيًا من جميع المستخدمين كل {seconds} ثانية.")
-        
-        while True:
-            await asyncio.sleep(seconds)
-            async for user in zedub.iter_participants(event.chat_id):
-                message = await zedub.get_message(event.chat_id, sender=user.id)
-                if message:
-                    await event.reply(f"🔍 رسالة من {user.id}: {message.text}")
-                else:
-                    await event.reply(f"❗ لم يتم العثور على رسائل جديدة من {user.id}.")
-    
-    except ValueError:
-        await event.reply("❌ يرجى التأكد من أن الأرقام صحيحة وضمن النطاق.")
-    except Exception as e:
-        await event.reply(f"❌ حدث خطأ غير متوقع: {str(e)}")
-
-@zedub.on(events.NewMessage(pattern=r'\.ايقاف القراءة تلقائيا'))
-async def stop_reading(event):
-    if active_readers:
-        active_readers.clear()
-        await event.reply("⏹️ تم إيقاف القراءة تلقائيًا.")
-    else:
-        await event.reply("❌ لا توجد عملية قراءة قيد التنفيذ.")
+@zedub.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
+async def tep_read(event):
+    global tep_enabled, tep_time
+    if tep_enabled:
+        await asyncio.sleep(tep_time)
+        await event.mark_read()
