@@ -1,7 +1,7 @@
 import time
 import asyncio
-from Tepthon import zedub
 from telethon import events
+from Tepthon import zedub
 from ..Config import Config
 
 plugin_category = "البوت"
@@ -11,8 +11,14 @@ active_readers = {}
 @zedub.on(events.NewMessage(pattern=r'\.القراءة تلقائيا (\d+) (\d+)'))
 async def read_messages(event):
     try:
-        seconds = int(event.message.text.split()[1])
-        user_id = int(event.message.text.split()[2])
+        # تأكد من أن الأوامر تحتوي على البيانات الصحيحة
+        input_text = event.message.text.split()
+        if len(input_text) != 3:
+            await event.reply("❌ يرجى استخدام الأمر بشكل صحيح: `.القراءة تلقائيا <عدد الثواني> <أيدي المستخدم>`")
+            return
+        
+        seconds = int(input_text[1])
+        user_id = int(input_text[2])
 
         if user_id not in active_readers:
             active_readers[user_id] = True
@@ -30,14 +36,21 @@ async def read_messages(event):
         else:
             await event.reply("❌ القراءة تلقائيًا لهذا المستخدم قيد التنفيذ بالفعل.")
     
-    except (IndexError, ValueError):
-        await event.reply("❌ يرجى التأكد من استخدام الأمر بشكل صحيح: `.القراءة تلقائيا <عدد الثواني> <أيدي المستخدم>`")
+    except ValueError:
+        await event.reply("❌ يرجى التأكد من أن الأرقام صحيحة وضمن النطاق.")
+    except Exception as e:
+        await event.reply(f"❌ حدث خطأ غير متوقع: {str(e)}")
 
 @zedub.on(events.NewMessage(pattern=r'\.القراءة تلقائيا للجميع (\d+)'))
 async def read_messages_all(event):
     try:
-        seconds = int(event.message.text.split()[2])
+        input_text = event.message.text.split()
+        if len(input_text) != 3:
+            await event.reply("❌ يرجى استخدام الأمر بشكل صحيح: `.القراءة تلقائيا للجميع <عدد الثواني>`")
+            return
         
+        seconds = int(input_text[2])
+
         await event.reply(f"📖 بدء القراءة تلقائيًا من جميع المستخدمين كل {seconds} ثانية.")
         
         while True:
@@ -49,8 +62,10 @@ async def read_messages_all(event):
                 else:
                     await event.reply(f"❗ لم يتم العثور على رسائل جديدة من {user.id}.")
     
-    except (IndexError, ValueError):
-        await event.reply("❌ يرجى التأكد من استخدام الأمر بشكل صحيح: `.القراءة تلقائيا للجميع <عدد الثواني>`")
+    except ValueError:
+        await event.reply("❌ يرجى التأكد من أن الأرقام صحيحة وضمن النطاق.")
+    except Exception as e:
+        await event.reply(f"❌ حدث خطأ غير متوقع: {str(e)}")
 
 @zedub.on(events.NewMessage(pattern=r'\.ايقاف القراءة تلقائيا'))
 async def stop_reading(event):
