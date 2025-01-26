@@ -1,6 +1,6 @@
 import asyncio
 from telethon import TelegramClient, events
-from Tepthon import zedub
+from Tepthon import zedub 
 from ..Config import Config
 
 plugin_category = "البوت"
@@ -16,7 +16,6 @@ async def leave_all_channels(event):
     try:
         async for dialog in zedub.iter_dialogs():
             if dialog.is_channel:
-                await dialog.click()  # الانضمام للقناة (إذا لزم الأمر)
                 await zedub.leave_dialog(dialog)  # مغادرة القناة
                 await event.reply(f"✅ مغادرة القناة: {dialog.title}")
 
