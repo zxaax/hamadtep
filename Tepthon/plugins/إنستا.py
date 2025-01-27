@@ -1,37 +1,42 @@
-from instaloader import Instaloader, Post
-from telethon import events
-from Tepthon import zedub 
+from telethon import TelegramClient, events
+from Tepthon import zedub
 from ..Config import Config
 
-plugin_category = "البوت"
+client = TelegramClient('my_session', Config.API_ID, Config.API_HASH)
 
-@zedub.on(events.NewMessage(pattern=r'\.انستا'))
-async def download_instagram_video(event):
-    # احصل على رابط الفيديو من الرسالة
-    post_url = event.message.text.split(maxsplit=1)[1] if len(event.message.text.split()) > 1 else None
-    
-    if not post_url:
-        await event.reply("يرجى إدخال رابط الفيديو بعد الأمر.")
-        return
+async def send_message_to_bot(bot_username, message):
+    bot = await client.get_input_entity(bot_username)
+    await client.send_message(bot, message)
 
-    loader = Instaloader()
+@zedub.on(events.NewMessage(pattern='\.انستا (.+)'))
+async def download_video(event):
+    url = event.pattern_match.group(1)
 
-    # محاولة تجزئة URL المنشور للحصول على shortcode
     try:
-        shortcode = post_url.split("/")[-2]
-        post = Post.from_shortcode(loader.context, shortcode)
+        # إرسال الرابط إلى البوت مباشرة
+        await send_message_to_bot('@instasavegrambot', url)
 
-        if post.is_video:
-            # تحديد اسم الملف
-            filename = f"{shortcode}.mp4"
-            # تحميل الفيديو
-            loader.download_post(post, target=shortcode)
+        # انتظر رد البوت (يمكن استخدام events أو طريقة أخرى حسب الطريقة التي يعمل بها البوت)
+        response = await client.get_messages('@instasavegrambot', limit=1)
 
-            await event.reply(f"📥 تم تحميل الفيديو بنجاح: {post.title}")
-            # إرسال الفيديو إلى الدردشة
-            await zedub.send_file(event.chat_id, f"{shortcode}/{filename}")
-
+        # تحقق من أن البوت أرسل الفيديو
+        if response and response[0].video:
+            # إرسال الفيديو مع الوصف إلى المستخدم
+            await event.respond(response[0].video)
+            await event.respond('تم التحميل بواسطة @Tepthon')
         else:
-            await event.reply("❌ هذا المنشور ليس فيديو.")
+            await event.respond('لم يتم العثور على فيديو. يرجى تجربة رابط آخر.')
+
     except Exception as e:
-        await event.reply(f"⚠️ خطأ: {str(e)}")
+        if "Forbidden" in str(e):  # إذا كان البوت محظورًا من قبل المستخدم
+            await event.respond('مرحبًا، يجب عليك التأكد من أنك لم تقم بحظر البوت @instasavegrambot')
+        else:
+            await event.respond(f'حدث خطأ: {str(e)}')
+
+async def main():
+    await client.start()
+    print("البوت جاهز!")
+    await client.run_until_disconnected()
+
+with client:
+    client.loop.run_until_complete(main())
