@@ -1,3 +1,4 @@
+#الجوكر
 from datetime import datetime
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from Tepthon import zedub
@@ -26,7 +27,7 @@ async def kakashi(event):
         return await edit_or_reply(event, "⎉╎ ضـع رابط الانستجرام بعــد الأمر أولًا")
 
     start = datetime.now()
-    catevent = await edit_or_reply(event, "⎉╎ جـــاري التحميــل انتظـر لُطفًــا 🔍..")
+    catevent = await edit_or_reply(event, "⎉╎ جـــاري التحميــــل انتظـــر لُطفًــــا 🔍..")
 
     async with event.client.conversation(chat) as conv:
         try:
@@ -37,7 +38,7 @@ async def kakashi(event):
             details = await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            await catevent.edit("⎉╎ ألـغِ حظر البوت ثم أعـد المحاولة @instasavegrambot")
+            await catevent.edit("⎉╎ ألـــغِ حظـر البوت ثم أعــد المـحاولة @instasavegrambot")
             return
         except Exception as e:
             await catevent.edit(f"⎉╎ خطــــأ ❌: {str(e)}")
@@ -51,7 +52,7 @@ async def kakashi(event):
     end = datetime.now()
     ms = (end - start).seconds
 
-    await cat.edit(f"꙳ ¦ تم تنزيل بواسطة : @Tepthon ", parse_mode="html")
+    await cat.edit(f"⎉╎ تم التنزيـل بواسطـة 🧸 : @Tepthon ", parse_mode="html")
 
     # حذف الرسائل المستخدمة في المحادثة
     await event.client.delete_messages(
