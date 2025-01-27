@@ -23,10 +23,10 @@ async def kakashi(event):
 
     # تحقق مما إذا كان الرابط صحيحًا
     if "www.instagram.com" not in link:
-        return await edit_or_reply(event, "᯽︙ - يجب كتابة رابط من الانستغرام لتحميله ❕")
+        return await edit_or_reply(event, "⎉╎ ضـع رابط الانستجرام بعــد الأمر أولًا")
 
     start = datetime.now()
-    catevent = await edit_or_reply(event, "᯽︙ جار التحميل انتظر قليلًا 🔍")
+    catevent = await edit_or_reply(event, "⎉╎ جـــاري التحميــل انتظـر لُطفًــا 🔍..")
 
     async with event.client.conversation(chat) as conv:
         try:
@@ -37,10 +37,10 @@ async def kakashi(event):
             details = await conv.get_response()
             await event.client.send_read_acknowledge(conv.chat_id)
         except YouBlockedUserError:
-            await catevent.edit("᯽︙ قـم بفتح الحظر على البوت @instasavegrambot")
+            await catevent.edit("⎉╎ ألـغِ حظر البوت ثم أعـد المحاولة @instasavegrambot")
             return
         except Exception as e:
-            await catevent.edit(f"᯽︙ حدث خطأ: {str(e)}")
+            await catevent.edit(f"⎉╎ خطــــأ ❌: {str(e)}")
             return
 
     await catevent.delete()
