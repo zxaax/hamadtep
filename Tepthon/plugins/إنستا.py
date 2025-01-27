@@ -1,5 +1,5 @@
 from telethon import TelegramClient, events
-from telethon import zedub
+from Tepthon import zedub
 from ..Config import Config
 import asyncio
 
