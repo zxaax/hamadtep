@@ -2,7 +2,7 @@ from telethon import TelegramClient, events
 from Tepthon import zedub
 from ..Config import Config
 
-client = TelegramClient('my_session', Config.API_ID, Config.API_HASH)
+client = TelegramClient('my_session', Config.APP_ID, Config.API_HASH)
 
 async def send_message_to_bot(bot_username, message):
     bot = await client.get_input_entity(bot_username)
