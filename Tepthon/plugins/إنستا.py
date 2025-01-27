@@ -1,13 +1,12 @@
+from Tepthon import zedub
 from telethon import TelegramClient, events
 from ..Config import Config
 
-client = TelegramClient('my_session', Config.APP_ID, Config.API_HASH)
-
 async def send_message_to_bot(bot_username, message):
-    bot = await client.get_input_entity(bot_username)
-    await client.send_message(bot, message)
+    bot = await zedub.get_input_entity(bot_username)
+    await zedub.send_message(bot, message)
 
-@client.on(events.NewMessage(pattern='\.انستا (.+)'))
+@zedub.on(events.NewMessage(pattern='\.انستا (.+)'))
 async def download_video(event):
     url = event.pattern_match.group(1)
 
@@ -16,7 +15,7 @@ async def download_video(event):
         await send_message_to_bot('@instasavegrambot', url)
 
         # انتظر رد البوت
-        response = await client.get_messages('@instasavegrambot', limit=1)
+        response = await zedub.get_messages('@instasavegrambot', limit=1)
 
         # تحقق من أن البوت أرسل الفيديو
         if response and response[0].video:
@@ -33,11 +32,11 @@ async def download_video(event):
             await event.respond(f'حدث خطأ: {str(e)}')
 
 async def main():
-    await client.start()
+    await zedub.start()
     print("البوت جاهز!")
-    await client.run_until_disconnected()
+    await zedub.run_until_disconnected()
 
 if __name__ == "__main__":
     # استخدم async with هنا
-    with client: 
-        client.loop.run_until_complete(main())
+    with zedub: 
+        zedub.loop.run_until_complete(main())
