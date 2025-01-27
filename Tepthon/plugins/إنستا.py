@@ -1,5 +1,5 @@
 from telethon import TelegramClient, events
-from Tepthon import zedub
+from telethon import zedub
 from ..Config import Config
 import asyncio
 
@@ -14,23 +14,21 @@ async def download_video(event):
     try:
         # إرسال الرابط إلى البوت مباشرة
         await send_message_to_bot('@instasavegrambot', url)
-
-        # الانتظار لفترة قصيرة للحصول على الرد
-        await asyncio.sleep(3)
+        
+        # الانتظار للرد من البوت
+        await asyncio.sleep(3)  # الانتظار لبضعة ثوانٍ قبل قراءة الرد
 
         # الانتظار للرد من البوت
         async for response in zedub.iter_messages('@instasavegrambot', limit=1):
-            # طباعة محتوى الرد للمساعدة في التحقق
-            print(f'Response text: {response.text}')
-
-            # تحقق مما إذا كان هناك فيديو متاح
+            # تحقق من أن البوت أرسل فيديو
             if response.video:
+                # إرسال الفيديو مع الوصف إلى المستخدم
                 await event.respond(file=response.video, caption='تم التحميل بواسطة @Tepthon')
             else:
                 await event.respond('لم يتم العثور على فيديو. يرجى تجربة رابط آخر.')
-
+                
     except Exception as e:
-        if "Forbidden" in str(e):
+        if "Forbidden" in str(e):  # إذا كان البوت محظورًا من قبل المستخدم
             await event.respond('مرحبًا، يجب عليك التأكد من أنك لم تقم بحظر البوت @instasavegrambot')
         else:
             await event.respond(f'حدث خطأ: {str(e)}')
@@ -40,6 +38,5 @@ async def main():
     print("البوت جاهز!")
     await zedub.run_until_disconnected()
 
-if __name__ == "__main__":  # تأكد من كتابة __name__ بشكل صحيح
-    async with zedub: 
-        await main()
+if __name__ == "__main__":  # التأكد من استخدام __name__ بشكل صحيح
+    asyncio.run(main())  # استخدم asyncio.run لتشغيل الدالة الرئيسية
