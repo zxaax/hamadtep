@@ -835,7 +835,6 @@ async def yt_search(event):
     reply_text = f"**⎉╎اليك عزيزي قائمة بروابط الكلمة اللتي بحثت عنها:**\n`{query}`\n\n**⎉╎النتائج:**\n{full_response}"
     await edit_or_reply(video_q, reply_text)
 
-from telethon.errors.rpcerrorlist import YouBlockedUserError
 
 @zedub.zed_cmd(
     pattern="ستوري(?: |$)(\d*)? ?([\s\S]*)",
