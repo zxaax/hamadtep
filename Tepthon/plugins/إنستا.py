@@ -2,6 +2,9 @@ from datetime import datetime
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from Tepthon import zedub
 
+# تعريف فئة أو اسم للبلاجن
+plugin_category = "Instagram"
+
 @zedub.zed_cmd(
     pattern="انستا (.*)",
     command=("انستا", plugin_category),
