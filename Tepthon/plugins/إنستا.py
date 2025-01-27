@@ -1,42 +1,50 @@
-from telethon import TelegramClient, events
+from telethon.errors.rpcerrorlist import YouBlockedUserError
+
 from Tepthon import zedub
-from ..Config import Config
-import asyncio
 
-async def send_message_to_bot(bot_username, message):
-    bot = await zedub.get_input_entity(bot_username)
-    await zedub.send_message(bot, message)
-
-@zedub.on(events.NewMessage(pattern='\.انستا (.+)'))
-async def download_video(event):
-    url = event.pattern_match.group(1)
-
-    try:
-        # إرسال الرابط إلى البوت مباشرة
-        await send_message_to_bot('@instasavegrambot', url)
-        
-        # الانتظار للرد من البوت
-        await asyncio.sleep(3)  # الانتظار لبضعة ثوانٍ قبل قراءة الرد
-
-        # الانتظار للرد من البوت
-        async for response in zedub.iter_messages('@instasavegrambot', limit=1):
-            # تحقق من أن البوت أرسل فيديو
-            if response.video:
-                # إرسال الفيديو مع الوصف إلى المستخدم
-                await event.respond(file=response.video, caption='تم التحميل بواسطة @Tepthon')
-            else:
-                await event.respond('لم يتم العثور على فيديو. يرجى تجربة رابط آخر.')
-                
-    except Exception as e:
-        if "Forbidden" in str(e):  # إذا كان البوت محظورًا من قبل المستخدم
-            await event.respond('مرحبًا، يجب عليك التأكد من أنك لم تقم بحظر البوت @instasavegrambot')
-        else:
-            await event.respond(f'حدث خطأ: {str(e)}')
-
-async def main():
-    await zedub.start()
-    print("البوت جاهز!")
-    await zedub.run_until_disconnected()
-
-if __name__ == "__main__":  # التأكد من استخدام __name__ بشكل صحيح
-    asyncio.run(main())  # استخدم asyncio.run لتشغيل الدالة الرئيسية
+@zedub.zed_cmd(
+    pattern="انستا (.*)",
+    command=("انستا", plugin_category),
+    info={
+        "header": "To download instagram video/photo",
+        "description": "Note downloads only public profile photos/videos.",
+        "examples": [
+            "{tr}insta <link>",
+        ],
+    },
+)
+async def kakashi(event):
+    "For downloading instagram media"
+    chat = "@instasavegrambot"
+    link = event.pattern_match.group(1)
+    if "www.instagram.com" not in link:
+        return await edit_or_reply(
+            event, "᯽︙ - يجب كتابة رابط من الانستغرام لتحميله ❕"
+        )
+    else:
+        start = datetime.now()
+        catevent = await edit_or_reply(event, "᯽︙ جار التحميل انتظر قليلًا 🔍")
+    async with event.client.conversation(chat) as conv:
+        try:
+            msg_start = await conv.send_message("/start")
+            response = await conv.get_response()
+            msg = await conv.send_message(link)
+            video = await conv.get_response()
+            details = await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
+        except YouBlockedUserError:
+            await catevent.edit(" ᯽︙ قـم بفتح الحظر على البوت @instasavegrambot")
+            return
+        await catevent.delete()
+        cat = await event.client.send_file(
+            event.chat_id,
+            video,
+        )
+        end = datetime.now()
+        ms = (end - start).seconds
+        await cat.edit(
+            f"꙳ ¦ تم تنزيل بواسطة  : @Tepthon ",
+            parse_mode="html",
+        )
+    await event.client.delete_messages(
+        conv.chat_id, [msg_start.id, response.id, msg.id, video.id, details.id]
