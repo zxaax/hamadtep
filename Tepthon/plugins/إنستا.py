@@ -41,7 +41,7 @@ async def kakashi(event):
             await catevent.edit("⎉╎ ألـــغِ حظـر البوت ثم أعــد المـحاولة @instasavegrambot")
             return
         except Exception as e:
-            await catevent.edit(f"⎉╎ خطــــأ ❌: {str(e)}")
+            await catevent.edit(f"⎉╎ خطــــــــأ ❌: {str(e)}")
             return
 
     await catevent.delete()
@@ -52,7 +52,7 @@ async def kakashi(event):
     end = datetime.now()
     ms = (end - start).seconds
 
-    await cat.edit(f"⎉╎ تم التنزيـل بواسطـة 🧸 : @Tepthon ", parse_mode="html")
+    await cat.edit(f"⎉╎ تم التنزيــل ♥️ : @Tepthon ", parse_mode="html")
 
     # حذف الرسائل المستخدمة في المحادثة
     await event.client.delete_messages(
