@@ -835,6 +835,8 @@ async def yt_search(event):
     reply_text = f"**⎉╎اليك عزيزي قائمة بروابط الكلمة اللتي بحثت عنها:**\n`{query}`\n\n**⎉╎النتائج:**\n{full_response}"
     await edit_or_reply(video_q, reply_text)
 
+from telethon.errors.rpcerrorlist import YouBlockedUserError
+
 @zedub.zed_cmd(
     pattern="ستوري(?: |$)(\d*)? ?([\s\S]*)",
     command=("ستوري", plugin_category),
@@ -850,7 +852,43 @@ async def _(event):
         return
     rnryr_link = event.pattern_match.group(1)
     chat = "@msaver_bot"
-        async with event.client.conversation(chat) as conv:
+    
+    async with event.client.conversation(chat) as conv:
+        try:
+            await conv.send_message("/start")
+            checker = await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
+
+            if "Choose the language you like" in checker.message:
+                await checker.click(1)
+
+            await conv.send_message(rnryr_link)
+            await conv.get_response()
+            await event.client.send_read_acknowledge(conv.chat_id)
+
+            media = await conv.get_response(timeout=10)
+            await event.client.send_read_acknowledge(conv.chat_id)
+
+            media_list = []
+
+            if media.media:
+                while True:
+                    media_list.append(media)
+                    try:
+                        media = await conv.get_response(timeout=2)
+                        await event.client.send_read_acknowledge(conv.chat_id)
+                    except asyncio.TimeoutError:
+                        break
+
+                details = media_list[0].message.splitlines()
+                await event.client.send_file(
+                    event.chat_id,
+                    media_list,
+                    caption=f"{details[0]}",
+                )
+                # تأكد من تنفيذ delete_conv بطريقة صحيحة
+                return await delete_conv(event, chat)
+
         except YouBlockedUserError:
             await event.edit("⎉╎ فـك حـظر البـوت وحـاول مجـددا @msaver_bot")
             return
