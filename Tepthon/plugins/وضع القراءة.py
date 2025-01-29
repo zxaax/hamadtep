@@ -17,11 +17,11 @@ async def mark_as_read(event):
             await asyncio.sleep(joker_time)
         await event.mark_read()
 
-@zedub.on(events.NewMessage(outgoing=True, pattern=r'^\.تعطيل القراءة تلقائيا$'))
+@zedub.on(events.NewMessage(outgoing=True, pattern=r'^\.ايقاف القراءة تلقائيا$'))
 async def disable_tepthon(event):
     global tepthon_enabled
     tepthon_enabled = False
-    await event.edit('❌ تم تعطيل أمر قراءة الرسائل تلقائيًّا بنجاح.')
+    await event.edit('**⎉╎ تـم تعطيـل أمر القراءة تلقائيًّــا بنجــاح .. ✅**')
 
 @zedub.on(events.NewMessage(outgoing=True, pattern=r'^\.القراءة تلقائيا (\d+) (\d+)$'))
 async def enable_tepthon(event):
