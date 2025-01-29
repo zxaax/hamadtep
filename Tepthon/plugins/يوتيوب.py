@@ -20,6 +20,7 @@ from telethon.tl.functions.contacts import UnblockRequest as unblock
 from telethon.utils import get_attributes
 from urlextract import URLExtract
 from wget import download
+from your_imported_modules import LOGS, yt_search, media_type, edit_or_reply, edit_delete, delete_conv
 from yt_dlp import YoutubeDL
 from yt_dlp.utils import (
     ContentTooShortError,
@@ -35,6 +36,17 @@ from yt_dlp.utils import (
 from ..Config import Config
 from ..core import pool
 from ..core.logger import logging
+from ShazamAPI import Shazam
+from telethon import types
+from telethon.errors.rpcerrorlist import YouBlockedUserError
+from telethon.tl.functions.contacts import UnblockRequest as unblock
+from telethon.tl.functions.messages import ImportChatInviteRequest as Get
+from validators.url import url
+
+from ..core.logger import logging
+from your_yt_search_module import yt_search
+from ..core.managers import edit_delete, edit_or_reply
+from ..helpers.functions import delete_conv, yt_search
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import progress, reply_id
 from ..helpers.functions import delete_conv
@@ -837,8 +849,8 @@ async def yt_search(event):
 
 
 @zedub.zed_cmd(
-    pattern="ابحث(?:\ع|$)([\s\S]*)",
-    command=("ابحث", plugin_category),
+    pattern="بحث(?:\ع|$)([\s\S]*)",
+    command=("بحث", plugin_category),
     info={
         "header": "To reverse search song.",
         "الوصـف": "Reverse search audio file using shazam api",
@@ -912,4 +924,4 @@ async def shazamcmd(event):
     )
     await zedevent.delete()
     if delete:
-        await delete_conv(event, chat, 
+        await delete_conv(event, chat, purgeflag)
