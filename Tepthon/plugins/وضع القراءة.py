@@ -30,20 +30,20 @@ async def enable_tepthon(event):
     user_id = int(event.pattern_match.group(2)) 
     OWNER_ID[user_id] = joker_time
     tepthon_enabled = True
-    await event.edit(f'✅ تم تفعيل أمر قراءة الرسائل تلقائيًّا مع {joker_time} ثانية للمستخدم {user_id}.')
+    await event.edit(f'**⎉╎ تم تفعيل أمر قـراءة الرسائـل تلقائـيًّــا مع {joker_time} ثانيـة للمستخـدم {user_id}.**')
 
-@zedub.on(events.NewMessage(outgoing=True, pattern=r'^\.تعطيل قراءة الرسائل للجميع$'))
+@zedub.on(events.NewMessage(outgoing=True, pattern=r'^\.ايقاف قراءة الرسائل للجميع$'))
 async def disable_tep(event):
     global tep_enabled
     tep_enabled = False
-    await event.edit('❌ تم تعطيل قراءة الرسائل تلقائيًّا على الجميع بنجاح.')
+    await event.edit('**⎉╎ لقـد تم تعطيل أمر قراءة الرسائل تلقائيًّـا على الجميـع بنجـاح .. ✅**')
 
 @zedub.on(events.NewMessage(outgoing=True, pattern=r'^\.قراءة رسائل الجميع (\d+)$'))
 async def enable_tep(event):
     global tep_enabled, tep_time
     tep_time = int(event.pattern_match.group(1))
     tep_enabled = True
-    await event.edit(f'✅ تم تفعيل مود قراءة الرسائل تلقائيًّا مع {tep_time} ثانية.')
+    await event.edit(f'**⎉╎ ✅ تم تفعيل قراءة الرسائل تلقائـيًّا الجميع مع {tep_time} ثانيـة.**')
 
 @zedub.on(events.NewMessage(incoming=True, func=lambda e: e.is_private))
 async def tep_read(event):
