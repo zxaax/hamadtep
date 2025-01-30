@@ -61,6 +61,7 @@ qrcode
 regex
 requests
 search-engine-parser
+ShazamAPI
 selenium
 spamwatch
 speedtest-cli
