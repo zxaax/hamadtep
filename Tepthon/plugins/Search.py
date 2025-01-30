@@ -12,7 +12,7 @@ LOGS = logging.getLogger(__name__)
 # إعداد عميل تيليجرام باستخدام api_id و api_hash من Config
 zedub = TelegramClient("zedub", api_id=Config.APP_ID, api_hash=Config.API_HASH)
 
-@zedub.on(events.NewMessage(pattern='بحث(?:\\ع|$)([\\s\\S]*)'))
+@zedub.on(events.NewMessage(pattern='ابحث(?:\\ع|$)([\\s\\S]*)'))
 async def shazamcmd(event):
     "To reverse search song."
     
