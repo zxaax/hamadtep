@@ -294,8 +294,8 @@ async def download_video(event):
 
 
 @zedub.zed_cmd(
-    pattern="بحث(?: |$)(\d*)? ?([\s\S]*)",
-    command=("بحث", plugin_category),
+    pattern="يوتيوب(?: |$)(\d*)? ?([\s\S]*)",
+    command=("يوتيوب", plugin_category),
     info={
         "header": "To search youtube videos",
         "description": "Fetches youtube search results with views and duration with required no of count results by default it fetches 10 results",
