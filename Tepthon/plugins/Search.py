@@ -35,21 +35,12 @@ from ..helpers import progress, reply_id
 
 plugin_category = "misc"
 
-def get_cookies_file():
-    folder_path = f"{os.getcwd()}/rcookies"
-    txt_files = glob.glob(os.path.join(folder_path, '*.txt'))
-    if not txt_files:
-        raise FileNotFoundError("No .txt files found in the specified folder.")
-    cookie_txt_file = random.choice(txt_files)
-    return cookie_txt_file
-
 audio_opts = {
     "format": "bestaudio",
     "addmetadata": True,
     "key": "FFmpegMetadata",
     "writethumbnail": True,
     "prefer_ffmpeg": True,
-    "cookiefile": get_cookies_file(),
     "geo_bypass": True,
     "nocheckcertificate": True,
     "postprocessors": [
@@ -67,7 +58,6 @@ audio_opts = {
 video_opts = {
     "format": "best",
     "addmetadata": True,
-    "cookiefile": get_cookies_file(),
     "key": "FFmpegMetadata",
     "writethumbnail": True,
     "prefer_ffmpeg": True,
@@ -171,8 +161,8 @@ async def _get_file_name(path: pathlib.Path, full: bool = True) -> str:
 
 
 @zedub.zed_cmd(
-    pattern="بحث(?: |$)(.*)",
-    command=("بحث", plugin_category),
+    pattern="تحميل ص(?: |$)(.*)",
+    command=("تحميل ص", plugin_category),
     info={
         "header": "To download audio from many sites like Youtube",
         "description": "downloads the audio from the given link (Suports the all sites which support youtube-dl)",
@@ -304,8 +294,8 @@ async def download_video(event):
 
 
 @zedub.zed_cmd(
-    pattern="يوتيوب(?: |$)(\d*)? ?([\s\S]*)",
-    command=("يوتيوب", plugin_category),
+    pattern="بحث(?: |$)(\d*)? ?([\s\S]*)",
+    command=("بحث", plugin_category),
     info={
         "header": "To search youtube videos",
         "description": "Fetches youtube search results with views and duration with required no of count results by default it fetches 10 results",
@@ -393,7 +383,7 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 from Tepthon import zedub
 
 
-@zedub.on(admin_cmd(pattern="تيك لاااا(?: |$)(.*)"))
+@zedub.on(admin_cmd(pattern="تيك توك(?: |$)(.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -419,4 +409,4 @@ async def _(event):
         await event.client.delete_messages(
             conv.chat_id, [msg_start.id, r.id, msg.id, details.id, video.id]
         )
-        await event.delete()
+        await event.delete().
