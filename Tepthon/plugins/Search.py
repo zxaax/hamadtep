@@ -1,7 +1,7 @@
 from telethon import TelegramClient, events
-from Tepthon import zedub 
 from telethon.errors import YouBlockedUserError
 from ShazamAPI import Shazam
+from Tepthon import zedub
 import io
 import logging
 from ..Config import Config  # استدعاء الإعدادات
@@ -75,5 +75,9 @@ async def shazamcmd(event):
         await zedub.send_message(chat, "/stop")  # نظف المحادثة إذا كنت بحاجة لذلك 
 
 # شغل العميل 
-zedub.start()
-zedub.run_until_disconnected()
+async def main():
+    await zedub.start()
+    await zedub.run_until_disconnected()
+
+import asyncio
+asyncio.run(main())
