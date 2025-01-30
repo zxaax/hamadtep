@@ -44,8 +44,8 @@ async def shazamcmd(event):
     file = track["images"]["background"]
     title = track["share"]["subject"]
     
-    # هنا قد تحتاج لتنفيذ دالة yt_search
-    slink = await yt_search(title)  # تأكد من تعريف هذه الدالة في مكان ما بالأعلى
+    # استدعاء وظيفة yt_search هنا وتحقق من تعريفها في مكان ما بالأعلى
+    slink = await yt_search(title)
 
     if flag == "s":
         deezer = track["hub"]["providers"][1]["actions"][0]["uri"][15:]
@@ -72,12 +72,14 @@ async def shazamcmd(event):
     )
     await zedevent.delete()
     if delete:
-        await zedub.send_message(chat, "/stop")  # نظف المحادثة إذا كنت بحاجة لذلك 
+        await zedub.send_message(chat, "/stop")
 
-# شغل العميل 
+# شغل العميل
 async def main():
     await zedub.start()
     await zedub.run_until_disconnected()
 
-import asyncio
-asyncio.run(main())
+# استدعاء main بشكل متزامن
+if __name__ == "__main__":
+    import asyncio
+    asyncio.get_event_loop().run_until_complete(main())
