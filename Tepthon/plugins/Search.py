@@ -1,15 +1,16 @@
 from telethon import TelegramClient, events
+from Tepthon import zedub 
 from telethon.errors import YouBlockedUserError
 from ShazamAPI import Shazam
-from Tepthon import zedub
 import io
 import logging
+from ..Config import Config  # استدعاء الإعدادات
 
 # إعدادات تسجيل الأخطاء
 LOGS = logging.getLogger(__name__)
 
-# إعداد عميل تيليجرام
-zedub = TelegramClient("zedub")
+# إعداد عميل تيليجرام باستخدام api_id و api_hash من Config
+zedub = TelegramClient("zedub", api_id=Config.APP_ID, api_hash=Config.API_HASH)
 
 @zedub.on(events.NewMessage(pattern='بحث(?:\\ع|$)([\\s\\S]*)'))
 async def shazamcmd(event):
