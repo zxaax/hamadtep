@@ -150,7 +150,7 @@ if Config.TG_BOT_USERNAME is not None and tgbot is not None:
                 zzd=zzd,
                 zzt=zzt,
                 telever=version.__version__,
-                zdver=zedversion,
+                zdver=tepversion,
                 pyver=python_version(),
                 dbhealth=check_sgnirts,
                 ping=ms,
@@ -4310,4 +4310,3 @@ async def _(event):
             [Button.inline("رجوع", data="toolzed")],
         ],
     link_preview=False)
-
