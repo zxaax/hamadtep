@@ -3,8 +3,8 @@ import requests
 import yt_dlp
 from telethon import TelegramClient, events
 from youtube_search import YoutubeSearch as B3KKK
+from ..Config import Config
 from Tepthon import zedub
-from telethon import TelegramClient, events # تصحيح الاستيراد
 import glob
 import random
 
@@ -19,12 +19,16 @@ def get_cookies_file():
 @zedub.on(events.NewMessage(pattern='.يوت (.*)'))
 async def srchDl(e):
     try:
+        # تحقق من هوية المرسل
+        if event.sender_id != Config.OWNER_ID:  # تأكد من أنك تستخدم معرف المرسل الصحيح
+            return
+
         txt = e.raw_text.split(maxsplit=1)  # تقسيم النص إلى امر والبحث
         if len(txt) < 2:
             await e.reply("اكتب اسم الفيديو بعد الامر.")
             return
         q = txt[1]
-        
+
         # استخدام B3KKK للبحث عن الفيديو
         res = B3KKK(q, max_results=1).to_dict()
         if not res:
@@ -35,14 +39,14 @@ async def srchDl(e):
         id = vid["id"]
         lnk = f"https://youtu.be/{id}"
         await e.reply(f"بيتم التحميل يا باشا: {ttl}")
-        
+
         opts = {
             "format": "bestaudio/best",
             "cookiefile": get_cookies_file(),
             "noplaylist": True,
             "quiet": True  # تقليل التفاعلات من yt-dlp
         }
-        
+
         with yt_dlp.YoutubeDL(opts) as ydl:
             info = ydl.extract_info(lnk, download=False)
 
@@ -55,14 +59,14 @@ async def srchDl(e):
         # تحميل الصوت
         audio_file = ydl.prepare_filename(info)
         ydl.download([lnk])
-        
+
         thb = info.get("thumbnail", None)
         if thb:
             thbFile = f"{id}.png"
             r = requests.get(thb)
             with open(thbFile, "wb") as f:
                 f.write(r.content)
-        
+
             await zedub.send_file(
                 e.chat_id,
                 audio_file,
