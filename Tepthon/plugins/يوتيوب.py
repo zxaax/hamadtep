@@ -812,8 +812,8 @@ async def _(event):
 
 
 @zedub.zed_cmd(
-    pattern="يوتيوب(?: |$)(\d*)? ?([\s\S]*)",
-    command=("يوتيوب", plugin_category),
+    pattern="يهنننم(?: |$)(\d*)? ?([\s\S]*)",
+    command=("يخخخخ", plugin_category),
     info={
         "header": "لـ البحـث عـن روابــط بالكلمــه المحــدده علـى يـوتيــوب",
         "مثــال": [
