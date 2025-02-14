@@ -3,6 +3,7 @@ import requests
 import yt_dlp
 from telethon import TelegramClient, events
 from youtube_search import YoutubeSearch as B3KKK
+from Tepthon import zedub
 from telethon import TelegramClient, events # تصحيح الاستيراد
 import glob
 import random
