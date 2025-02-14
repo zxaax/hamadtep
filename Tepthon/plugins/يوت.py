@@ -20,7 +20,7 @@ def get_cookies_file():
 async def srchDl(e):
     try:
         # تحقق من هوية المرسل
-        if event.sender_id != Config.OWNER_ID:  # تأكد من أنك تستخدم معرف المرسل الصحيح
+        if e.sender_id != Config.OWNER_ID:  # تأكد من أنك تستخدم معرف المرسل الصحيح
             return
 
         txt = e.raw_text.split(maxsplit=1)  # تقسيم النص إلى امر والبحث
