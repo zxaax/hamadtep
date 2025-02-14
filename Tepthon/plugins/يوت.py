@@ -17,9 +17,6 @@ def get_cookies_file():
     return cookie_txt_file
 
 @zedub.on(events.NewMessage(pattern='.يوت (.*)'))
-if event.sender_id != Config.OWNER_ID:
-        return
-  
 async def srchDl(e):
     try:
         txt = e.raw_text.split(maxsplit=1)  # تقسيم النص إلى امر والبحث
