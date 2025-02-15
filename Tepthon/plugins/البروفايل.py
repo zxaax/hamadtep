@@ -20,12 +20,12 @@ LOGS = logging.getLogger(__name__)
 #                                                             𝙕𝙏𝙝𝙤𝙣
 # =========================================================== #
 BIO_OK = "**⎉╎تم تغييـر بايـو حسـابك .. بنجـاح ✅**"
-NAME_OK = "*- تم تغييـر اسم حسابـك بنجـاح ✅**"
+NAME_OK = "**⎉╎تم تغييـر إسـم حسـابك .. بنجـاح ✅**"
 USERNAME_OK = "**⎉╎تم تغييـر يـوزر حسـابك .. بنجـاح ✅**"
 PP_CHANGED = "**⎉╎تم تغييـر صـورة حسـابك .. بنجـاح ✅**"
 USERNAME_TAKEN = "**⎉╎هـذا اليـوزر مستخـدم ؟!**"
-PP_TOO_SMOL = "** ⎉╎هذه الصورة صغيرة جدًّا قم بـ اختيار صورة أخرى**"
-PP_ERROR = "** ⎉╎حدث خطأ أثنـاء معالجـة الصـورة  ⌁**"
+PP_TOO_SMOL = "** ⎉╎هذه الصورة صغيرة جداً قم بـ اختيار صورة أخرى**"
+PP_ERROR = "** ⎉╎حدث خطا اثناء معالجه الصوره  ⌁**"
 INVALID_MEDIA = "⎉╎امتداد هذه الصورة غير صالح"
 # =========================================================== #
 #                                                             𝙕𝙏𝙝𝙤𝙣
@@ -38,7 +38,7 @@ async def _(event):
     if not bio and reply:
         bio = reply.text
     if not bio:
-        return await edit_delete(event, "**- أرسـل (.ضع بايو) + البايـو أو بالـرد علـى البايـو**", 10)
+        return await edit_delete(event, "**- ارسـل (.ضع بايو) + البايـو او بالـرد ع البايـو**", 10)
     try:
         await event.client(functions.account.UpdateProfileRequest(about=bio))
         await edit_delete(event, BIO_OK)
@@ -53,7 +53,7 @@ async def _(event):
     if not names and reply:
         names = reply.text
     if not names:
-        return await edit_delete(event, "**- أرسـل (.ضع اسم) + الاسـم أو بالـرد على الاسـم**", 10)
+        return await edit_delete(event, "**- ارسـل (.ضع اسم) + الاسـم او بالـرد ع الاسـم**", 10)
     first_name = names
     last_name = ""
     if ";" in names:
@@ -73,7 +73,7 @@ async def _(event):
 async def _(event):
     reply_message = await event.get_reply_message()
     if not reply_message:
-        return await edit_delete(event, "**- أرسـل (.ضع صورة) بالــرد علـى الصـورة**", 10)
+        return await edit_delete(event, "**- ارســل (.ضع صورة) بالــرد ع الصـورة**", 10)
     reply_message = await event.get_reply_message()
     catevent = await edit_or_reply(
         event, "**...**"
@@ -94,7 +94,7 @@ async def _(event):
                 # https://t.me/tgbetachat/324694
                 size = os.stat(photo).st_size
                 if size > 2097152:
-                    await catevent.edit("⎉╎يجب أن يكون الحجم أقل من 2 ميغابايت ❗")
+                    await catevent.edit("⎉╎يجب ان يكون الحجم اقل من 2 ميغا ✅")
                     os.remove(photo)
                     return
                 catpic = None
@@ -125,7 +125,7 @@ async def update_username(username):
     if not newusername and reply:
         newusername = reply.text
     if not newusername:
-        return await edit_delete(event, "**- أرسـل (.ضع يوزر) + اليـوزر أو بالـرد على اليـوزر**", 10)
+        return await edit_delete(event, "**- ارسـل (.ضع يوزر) + اليـوزر او بالـرد ع اليـوزر**", 10)
     try:
         await username.client(UpdateUsernameRequest(newusername))
         await edit_delete(event, USERNAME_OK)
@@ -164,16 +164,16 @@ async def count(event):
 
     result += f"**⎉╎الأشخاص:**\t**{u}**\n"
     result += f"**⎉╎الـمجموعات:**\t**{g}**\n"
-    result += f"**⎉╎المجموعات الخارقـة:**\t**{c}**\n"
+    result += f"**⎉╎المجموعات الخارقه:**\t**{c}**\n"
     result += f"**⎉╎القنوات:**\t**{bc}**\n"
     result += f"**⎉╎البوتات:**\t**{b}**"
 
     await catevent.edit(result)
 
 
-@zedub.zed_cmd(pattern="حذف صورة ?(.*)")
+@zedub.zed_cmd(pattern="حذف صوره ?(.*)")
 async def remove_profilepic(delpfp):
-#.حذف صورة <رقم الصورة> | .حذف صورة
+#.حذف صوره <رقم الصورة> | .حذف صوره
     group = delpfp.text[8:]
     if group == "الكل":
         lim = 0
@@ -194,14 +194,14 @@ async def remove_profilepic(delpfp):
     ]
     await delpfp.client(DeletePhotosRequest(id=input_photos))
     await edit_delete(
-        delpfp, f"**⎉╎تـم حـذف الصـورة رقـم** {len(input_photos)}\n**⎉╎تـم حذف الصـورة من حسابك بنجـاح ✅**"
+        delpfp, f"**⎉╎تـم حـذف الصـورة رقـم** {len(input_photos)}\n**⎉╎مـن حسـابك .. بنجـاح ✅**"
     )
 
 
 @zedub.zed_cmd(pattern="انشائي$")
 async def _(event):
     result = await event.client(GetAdminedPublicChannelsRequest())
-    output_str = "**• قائمـة القنـوات والمجموعـات التي قمـت بإنشائها :**\n"
+    output_str = "**⎉╎جميع القنوات والمجموعات التي قمت بأنشائها :**\n"
     output_str += "".join(
         f" - {channel_obj.title} @{channel_obj.username} \n"
         for channel_obj in result.chats
