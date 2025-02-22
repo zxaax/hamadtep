@@ -19,7 +19,7 @@ def get_cookies_file():
     return cookie_txt_file
 
 
-@zedub.on(events.NewMessage(pattern='.بحث3 (.*)'))
+@zedub.on(events.NewMessage(pattern='.بحث (.*)'))
 async def get_song(event):
     song_name = event.pattern_match.group(1)
     await event.reply(f"جاري البحث عن الأغنية: {song_name}...")
