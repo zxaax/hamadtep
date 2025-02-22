@@ -41,12 +41,7 @@ async def srchDl(e):
         await e.reply(f"بيتم التحميل يا باشا: {ttl}")
 
         opts = {
-            "format": "bestaudio[ext=m4a]/best[ext=mp4]/best[ext=webm]",  # خيارات التنسيق
-            "postprocessors": [{
-                "key": "FFmpegExtractAudio",
-                "preferredcodec": "mp3",  # تغيير التنسيق إلى MP3
-                "preferredquality": "192",  # الجودة
-            }],
+            "format": "bestaudio/best",
             "cookiefile": get_cookies_file(),
             "noplaylist": True,
             "quiet": True  # تقليل التفاعلات من yt-dlp
