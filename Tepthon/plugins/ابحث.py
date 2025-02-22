@@ -1,66 +1,62 @@
-import os
 import random
 import glob
+import asyncio
 import yt_dlp
-from telethon import events
+import os
+from telethon import TelegramClient, events
+from yt_dlp import YoutubeDL
 from Tepthon import zedub
+from ..Config import Config
 
-# دالة لاختيار ملف كوكيز عشوائي
+plugin_category = "البوت"
+
 def get_cookies_file():
-    folder_path = f"{os.getcwd()}/rcookies"
-    txt_files = glob.glob(os.path.join(folder_path, '*.txt'))
-    return random.choice(txt_files) if txt_files else None
+    folder_path = f"{os.getcwd()}/rbaqir"
+    txt_files = glob.glob(os.path.join(folder_path, '*.txt'))
+    if not txt_files:
+        raise FileNotFoundError("No .txt files found in the specified folder.")
+    cookie_txt_file = random.choice(txt_files)
+    return cookie_txt_file
 
-@zedub.on(events.NewMessage(pattern='.بحث (.*)'))
+
+@zedub.on(events.NewMessage(pattern='.بحث3 (.*)'))
 async def get_song(event):
-    song_name = event.pattern_match.group(1)
-    await event.edit("**⎉╎ جــاري البحــث عن المطلـوب 🎧..**")
+    song_name = event.pattern_match.group(1)
+    await event.reply(f"جاري البحث عن الأغنية: {song_name}...")
 
-    # إنشاء مجلد التحميل
-    download_path = os.path.join(os.getcwd(), "downloads")
-    os.makedirs(download_path, exist_ok=True)
+    # إعداد خيارات yt-dlp
+    ydl_opts = {
+        "format": "bestaudio/best",
+        "addmetadata": True,
+        "key": "FFmpegMetadata",
+        "writethumbnail": False,
+        "prefer_ffmpeg": True,
+        "geo_bypass": True,
+        "nocheckcertificate": True,
+        "postprocessors": [
+            {"key": "FFmpegVideoConvertor", "preferedformat": "mp3"},
+            {"key": "FFmpegMetadata"},
+            {"key": "FFmpegExtractAudio"},
+        ],
+        "outtmpl": "%(title)s.%(ext)s",
+        "logtostderr": False,
+        "quiet": True,
+        "no_warnings": True,
+        "cookiefile": get_cookies_file(),
+    }
 
-    # إعدادات yt-dlp
-    ydl_opts = {
-        "format": "bestaudio/best",
-        "paths": {"home": download_path},
-        "addmetadata": True,
-        "postprocessors": [
-            {"key": "FFmpegExtractAudio", "preferredcodec": "mp3", "preferredquality": "192"},
-            {"key": "FFmpegMetadata"},
-        ],
-        "outtmpl": os.path.join(download_path, "%(title)s.%(ext)s"),
-        "cookiefile": get_cookies_file(),
-        "quiet": True,
-    }
+    with YoutubeDL(ydl_opts) as ydl:
+        try:
+            info = ydl.extract_info(f"ytsearch:{song_name}", download=True)
+            title = info['entries'][0]['title']
+            filename = f"{title}.mp3"
 
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        try:
-            info = ydl.extract_info(f"ytsearch:{song_name}", download=True)
-            entries = info.get('entries', [])
-            if not entries:
-                await event.edit("**⎉╎ لم يتم العثــور على نتائج 🥹**")
-                return
-            
-            # الحصول على بيانات الفيديو
-            video = entries[0]
-            title = video.get('title', 'عنوان غير معروف')
-            filename = os.path.join(download_path, f"{title}.mp3")
+            await event.reply(f"تم العثور على الأغنية: {title}\nجاري إرسال الملف...")
 
-            # التحقق من وجود الملف بعد تحميله
-            if not os.path.exists(filename):
-                await event.edit("**⎉╎ خطــأ: لم يتم العثور على الملف بعد التحميل**")
-                return
+            # إرسال الملف إلى تيليجرام
+            await zedub.send_file(event.chat_id, filename)
 
-            await event.edit(f"**⎉╎ تم العثور على المطلـوب، جاري الإرسـال..**")
-
-            # إرسال الملف
-            caption = f"**⎉╎ تم التنزيل: {title} ♥️\n⎉╎ بواسطـة: @Tepthon**"
-            await zedub.send_file(event.chat_id, filename, caption=caption)
-
-            # حذف الملف بعد الإرسال
-            os.remove(filename)
-
-            await event.edit("**⎉╎ تم الإرسال بنجاح! ✅**")
-        except Exception as e:
-            await event.edit(f"**⎉╎ حدث خطأ: {str(e)}**")
+            # حذف الملف بعد الإرسال
+            os.remove(filename)
+        except Exception as e:
+            await event.reply(f"حدث خطأ أثناء البحث عن الأغنية: {e}")
