@@ -486,7 +486,7 @@ async def _(event): #Code by T.me/zzzzl1l
     'geo_bypass': True,
     'outtmpl': '%(title)s.%(ext)s',
     'quiet': True,  # تصحيح الخطأ الإملائي
-    'cookiefile': '/root/Userbot/rcookies/cookies.txt',  # تحديد ملف الكوكيز
+    'cookiefile': '/root/Userbot/rcookies/cozc.txt',  # تحديد ملف الكوكيز
     }
     try:
         results = YoutubeSearch(query, max_results=1).to_dict()
