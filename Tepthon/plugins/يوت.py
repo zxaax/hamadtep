@@ -59,7 +59,7 @@ video_opts = {
     "prefer_ffmpeg": True,
     "geo_bypass": True,
     "nocheckcertificate": True,
-    "cookiefile": "/root/Userbot/rcookies/cozc.txt",  # إضافة ملف الكوكيز هنا
+    "cookiefile": "rcookies/cozc.txt",  # إضافة ملف الكوكيز هنا
     "postprocessors": [
         {"key": "FFmpegVideoConvertor", "preferedformat": "mp4"},
         {"key": "FFmpegMetadata"},
@@ -486,7 +486,7 @@ async def _(event): #Code by T.me/zzzzl1l
     'geo_bypass': True,
     'outtmpl': '%(title)s.%(ext)s',
     'quiet': True,  # تصحيح الخطأ الإملائي
-    'cookiefile': '/root/Userbot/rcookies/cozc.txt',  # تحديد ملف الكوكيز
+    'cookiefile': 'rcookies/cozc.txt',  # تحديد ملف الكوكيز
     }
     try:
         results = YoutubeSearch(query, max_results=1).to_dict()
@@ -555,7 +555,7 @@ async def _(event): #Code by T.me/zzzzl1l
     "geo_bypass": True,
     "outtmpl": "%(title)s.%(ext)s",
     "quiet": True,  # تصحيح الخطأ الإملائي من 'quite' إلى 'quiet'
-    "cookiefile": "/root/Userbot/rcookies/cozc.txt",  # إضافة ملف الكوكيز
+    "cookiefile": "rcookies/cozc.txt",  # إضافة ملف الكوكيز
     }
     try:
         results = YoutubeSearch(query, max_results=1).to_dict()
