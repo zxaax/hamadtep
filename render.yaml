@@ -1,5 +1,5 @@
 databases:
-  - name: Userbot
+  - name: Source
     ipAllowList: []
     region: frankfurt
     plan: free
@@ -8,7 +8,7 @@ services:
     plan: free
     name: Userbot
     env: python
-    repo: https://github.com/zxaax/Userbot
+    repo: https://github.com/zxaax/hamadtep
     buildCommand: pip install -U -r requirements.txt
     startCommand: python3 server.py & python3 -m Tepthon
     region: frankfurt
